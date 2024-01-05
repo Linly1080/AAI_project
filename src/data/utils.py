@@ -4,6 +4,7 @@ import os
 from torch.utils.data import Sampler
 
 from data.mnist import ColoredMNIST
+from data.OurMNIST import OurMNIST
 from data.beer import BeerReview
 from data.bird import Bird
 from data.ask2me import ASK2ME
@@ -72,7 +73,9 @@ def is_textdata(dataset):
 def get_dataset(data_name, is_target=None, vocab=None):
     os.makedirs('./datasets', exist_ok=True)
     if 'MNIST' in data_name:
-        data = ColoredMNIST('./datasets/mnist', data_config=data_name[6:],
+        # data = ColoredMNIST('./datasets/mnist', data_config=data_name[6:],
+        #                     target=is_target)
+        data = OurMNIST('/data/linhuiyan/BIBM2023/AAI_project/processed_data', data_config=data_name[6:],
                             target=is_target)
         return data
 
