@@ -72,10 +72,14 @@ def is_textdata(dataset):
 
 def get_dataset(data_name, is_target=None, vocab=None):
     os.makedirs('./datasets', exist_ok=True)
+
+    if 'OurMNIST' in data_name:
+        data = OurMNIST('/data/linhuiyan/BIBM2023/AAI_project/new_data', data_config=data_name[9:],
+                            target=is_target)
+        return data
+
     if 'MNIST' in data_name:
-        # data = ColoredMNIST('./datasets/mnist', data_config=data_name[6:],
-        #                     target=is_target)
-        data = OurMNIST('/data/linhuiyan/BIBM2023/AAI_project/processed_data', data_config=data_name[6:],
+        data = ColoredMNIST('./datasets/mnist', data_config=data_name[6:],
                             target=is_target)
         return data
 

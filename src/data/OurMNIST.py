@@ -26,20 +26,20 @@ class OurMNIST(Dataset):
 
         # use the first half for train env 0
         self.envs.append(self.create_env(
-            data=self.data['train'], bias_ratio=0.1, start_ratio=0, end_ratio=0.5))
+            data=self.data['train'], bias_ratio=0.1, start_ratio=0, end_ratio=0.4))
 
         # use the second half for train env 1
         self.envs.append(self.create_env(
             data=self.data['train'], bias_ratio=0.2 if target else 0.1,
-            start_ratio=0.5, end_ratio=1))
+            start_ratio=0.4, end_ratio=0.8))
 
         # use the first half for val env
         self.envs.append(self.create_env(
-            data=self.data['test'], bias_ratio=0.1, start_ratio=0, end_ratio=0.5))
+            data=self.data['train'], bias_ratio=0.1, start_ratio=0.8, end_ratio=1))
 
         # use the second half for test env
         self.envs.append(self.create_env(
-            data=self.data['test'], bias_ratio=0.9, start_ratio=0.5, end_ratio=1))
+            data=self.data['test'], bias_ratio=0.9, start_ratio=0, end_ratio=1))
 
         self.length = sum([len(env['images']) for env in self.envs])
 
@@ -116,6 +116,10 @@ class OurMNIST(Dataset):
             mean2 = torch.sum(mean1, dim=2)
             max_values, _ = torch.max(mean2, dim=1)
             channel_indices = mean2.argmax(dim=1)
+            #
+            # cur_images = torch.sum(cur_images, dim=1)
+            # cur_images = torch.unsqueeze(cur_images, 1)
+
             images.append(cur_images[start:end])
             labels.append((torch.ones(end-start) * cur_label).long())
             cor.append(channel_indices)
@@ -123,6 +127,10 @@ class OurMNIST(Dataset):
         images = torch.cat(images, dim=0)
         labels = torch.cat(labels, dim=0)
         cor = torch.cat(cor, dim=0)
+
+        print(images.shape)
+        print(labels.shape)
+        print(cor.shape)
 
         idx_dict = defaultdict(list)
         for i in range(len(images)):
