@@ -1,9 +1,11 @@
 import argparse
+import os
 from datetime import datetime
 
 import numpy as np
 import torch
 import torch.nn as nn
+from PIL import Image
 from termcolor import colored
 from torch.utils.data import DataLoader
 
@@ -78,6 +80,8 @@ if __name__ == '__main__':
     model['clf'].eval()
     names = []
     pred = []
+    output_folder = 'output_images'
+    os.makedirs(output_folder, exist_ok=True)
     with open('src/results.txt', 'w') as file:
         for batch in test_loader:
             # work on each batch
@@ -91,6 +95,17 @@ if __name__ == '__main__':
 
             pred.append(y_hat)
             names.append(batch['N'])
-            for name, prediction in zip(batch['N'], y_hat.data):
+            for image, name, prediction in zip(batch['X'], batch['N'], y_hat.data):
                 file.write(name[0] + ' ' + str(prediction.item()) + '\n')
 
+                # 创建以标签命名的文件夹
+                label_folder = os.path.join(output_folder, str(prediction.item()))
+                os.makedirs(label_folder, exist_ok=True)
+
+                # 保存图像到相应的文件夹中
+                image_path = os.path.join(label_folder, name[0] + '.jpg')
+                print(image.shape)
+                image = torch.sum(image,dim=0).cpu().numpy()*255
+                image = Image.fromarray(image)
+                image = image.convert('L')
+                image.save(image_path)
