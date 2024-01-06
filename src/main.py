@@ -179,3 +179,27 @@ if __name__ == '__main__':
 
     # evaluate the robust performance on the test data
     tofu.evaluate_target_model(tar_data, model, args)
+
+    torch.save(model['ebd'].state_dict(), 'src/model_ebd.pth')
+    torch.save(model['clf'].state_dict(), 'src/model_clf.pth')
+
+    tofu.train_target_model(
+        src_data, model, partition_model, opt, args
+    )
+
+    # evaluate the robust performance on the test data
+    tofu.evaluate_target_model(src_data, model, args)
+
+    torch.save(model['ebd'].state_dict(), 'src/model_ebd_twice.pth')
+    torch.save(model['clf'].state_dict(), 'src/model_clf_twice.pth')
+
+
+    tofu.train_target_model(
+        src_data, model, partition_model, opt, args
+    )
+
+    # evaluate the robust performance on the test data
+    tofu.evaluate_target_model(src_data, model, args)
+
+    torch.save(model['ebd'].state_dict(), 'src/model_ebd_third.pth')
+    torch.save(model['clf'].state_dict(), 'src/model_clf_third.pth')

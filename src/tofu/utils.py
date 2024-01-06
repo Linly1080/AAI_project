@@ -10,6 +10,8 @@ def to_cuda(d):
         convert the input dict to cuda
     '''
     for k, v in d.items():
+        if k == 'N':
+            continue
         d[k] = v.cuda()
 
     return d
@@ -21,6 +23,9 @@ def squeeze_batch(batch):
     '''
     res = {}
     for k, v in batch.items():
+        if k == 'N':
+            res[k] = v
+            continue
         assert len(v) == 1
         res[k] = v[0]
 
