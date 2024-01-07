@@ -66,8 +66,8 @@ if __name__ == '__main__':
     model, opt = get_model(args, test_data)
 
     # 加载模型参数
-    model['ebd'].load_state_dict(torch.load('src/model_ebd.pth'))
-    model['clf'].load_state_dict(torch.load('src/model_clf.pth'))
+    model['ebd'].load_state_dict(torch.load('src/model_ebd_twice.pth'))
+    model['clf'].load_state_dict(torch.load('src/model_clf_twice.pth'))
 
     test_env=0
     test_loader = DataLoader(
@@ -104,7 +104,7 @@ if __name__ == '__main__':
 
                 # 保存图像到相应的文件夹中
                 image_path = os.path.join(label_folder, name[0] + '.jpg')
-                print(image.shape)
+                # print(image.shape)
                 image = torch.sum(image,dim=0).cpu().numpy()*255
                 image = Image.fromarray(image)
                 image = image.convert('L')
